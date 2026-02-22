@@ -497,10 +497,10 @@ class ShinsOverlayClass {
 			w1 := this.width
 		if (!RegExMatch(extraOptions,"h([\d\.]+)",h))
 			h1 := this.height
-		bold := (RegExMatch(extraOptions,"bold") ? 700 : 400)
+		fw := (RegExMatch(extraOptions, "fw([\d\.]+)", &fw) ? fw[1] : (RegExMatch(extraOptions, "bold") ? 700 : 400))
 		
-		if (!p := this.fonts[fontName size bold]) {
-			p := this.CacheFont(fontName,size,bold)
+		if (!p := this.fonts[fontName size fw]) {
+			p := this.CacheFont(fontName,size,fw)
 		}
 		
 		DllCall(this.vTable(p,3),"ptr",p,"uint",(InStr(extraOptions,"aRight") ? 1 : InStr(extraOptions,"aCenter") ? 2 : 0))
@@ -530,10 +530,10 @@ class ShinsOverlayClass {
 			w1 := this.width
 		if (!RegExMatch(extraOptions,"h([\d\.]+)",h))
 			h1 := this.height
-		bold := (RegExMatch(extraOptions,"i)bold") ? 700 : 400)
+		weight := (RegExMatch(extraOptions,"i)bold") ? 700 : 400)
 		
-		if (!p := this.fonts[fontName size bold]) {
-			p := this.CacheFont(fontName,size,bold)
+		if (!p := this.fonts[fontName size weight]) {
+			p := this.CacheFont(fontName,size,weight)
 		}
 		
 		DllCall(this.vTable(p,3),"ptr",p,"uint",(InStr(extraOptions,"aRight") ? 1 : InStr(extraOptions,"aCenter") ? 2 : 0))
@@ -1250,12 +1250,12 @@ class ShinsOverlayClass {
 		}
 		return this.imageCache[image] := {p:bitmap,w:w,h:h}
 	}
-	CacheFont(name,size,bold:=400) {
-		if (DllCall(this.vTable(this.wFactory,15),"ptr",this.wFactory,"wstr",name,"ptr",0,"uint",bold,"uint",0,"uint",5,"float",size,"wstr","en-us","ptr*",textFormat) != 0) {
-			this.Err("Unable to create font: " name " (size: " size ", bold: " bold ")","Try a different font or check to see if " name " is a valid font!")
+	CacheFont(name,size,weight:=400) {
+		if (DllCall(this.vTable(this.wFactory,15),"ptr",this.wFactory,"wstr",name,"ptr",0,"uint",weight,"uint",0,"uint",5,"float",size,"wstr","en-us","ptr*",textFormat) != 0) {
+			this.Err("Unable to create font: " name " (size: " size ", weight: " weight ")","Try a different font or check to see if " name " is a valid font!")
 			return 0
 		}
-		return this.fonts[name size bold] := textFormat
+		return this.fonts[name size weight] := textFormat
 	}
 	__Delete() {
 		DllCall("gdiplus\GdiplusShutdown", "Ptr*", this.gdiplusToken)
