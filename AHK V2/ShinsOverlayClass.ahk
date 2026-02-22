@@ -398,11 +398,12 @@ class ShinsOverlayClass {
 	;return				;				Void
 	
 	DrawText(text,x,y,size:=18,color:=0xFFFFFFFF,fontName:="Arial",extraOptions:="") {
-		local w,h,p,ds,dsx,dsy,ol
+		local w,h,fw,p,ds,dsx,dsy,ol
 		w := (RegExMatch(extraOptions,"w([\d\.]+)",&w) ? w[1] : this.width)
 		h := (RegExMatch(extraOptions,"h([\d\.]+)",&h) ? h[1] : this.height)
+		fw := (RegExMatch(extraOptions,"fw([\d\.]+)",&fw) ? fw[1] : 400)
 		
-		p := (this.fonts.Has(fontName size) ? this.fonts[fontName size] : this.CacheFont(fontName,size))
+		p := (this.fonts.Has(fontName size fw) ? this.fonts[fontName size fw] : this.CacheFont(fontName,size,fw))
 		
 		DllCall(this.vTable(p,3),"ptr",p,"uint",(InStr(extraOptions,"aRight") ? 1 : InStr(extraOptions,"aCenter") ? 2 : 0))
 		
@@ -1023,10 +1024,10 @@ class ShinsOverlayClass {
 		}
 		return this.imageCache[image] := Map("p",bitmap, "w",w, "h",h)
 	}
-	CacheFont(name,size) {
+	CacheFont(name,size,weight) {
 		local textFormat := 0
-		if (DllCall(this.vTable(this.wFactory,15),"ptr",this.wFactory,"wstr",name,"ptr",0,"uint",400,"uint",0,"uint",5,"float",size,"wstr","en-us","Ptr*",&textFormat) != 0) {
-			this.Err("Unable to create font: " name " (size: " size ")","Try a different font or check to see if " name " is a valid font!")
+		if (DllCall(this.vTable(this.wFactory,15),"ptr",this.wFactory,"wstr",name,"ptr",0,"uint",weight,"uint",0,"uint",5,"float",size,"wstr","en-us","Ptr*",&textFormat) != 0) {
+			this.Err("Unable to create font: " name " (size: " size ", weight: " weight ")","Try a different font or check to see if " name " is a valid font!")
 			return 0
 		}
 		return this.fonts[name size] := textFormat
