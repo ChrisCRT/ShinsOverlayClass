@@ -401,7 +401,7 @@ class ShinsOverlayClass {
 		local w,h,fw,p,ds,dsx,dsy,ol
 		w := (RegExMatch(extraOptions,"w([\d\.]+)",&w) ? w[1] : this.width)
 		h := (RegExMatch(extraOptions,"h([\d\.]+)",&h) ? h[1] : this.height)
-		fw := (RegExMatch(extraOptions,"fw([\d\.]+)",&fw) ? fw[1] : 400)
+		fw := (RegExMatch(extraOptions,"fw([\d\.]+)",&fw) ? fw[1] : (RegExMatch(extraOptions,"bold") ? 700 : 400))
 		
 		p := (this.fonts.Has(fontName size fw) ? this.fonts[fontName size fw] : this.CacheFont(fontName,size,fw))
 		
